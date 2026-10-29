@@ -53,6 +53,6 @@ Die fertige Jar gibt es unter **Actions → build → Artifacts → FrameBoost**
 ## Selbst bauen
 
 ```
-./gradlew build                 # Jar in build/libs/
+./gradlew build                 # Jar in build/libs/ (Gradle braucht JDK 25)
 ./gradlew runMixinAudit         # prüft, dass alle Mixins greifen
 ```

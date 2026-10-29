@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BeaconBlockEntity;
@@ -17,8 +19,9 @@ public final class Culling {
 
 	public static boolean shouldSkipEntity(Entity entity, double camX, double camY, double camZ) {
 		FrameBoostConfig config = FrameBoost.config;
-		// noCulling: huge entities such as the ender dragon, which vanilla always renders.
-		if (!config.enabled || entity.noCulling || entity instanceof Player || entity.isCurrentlyGlowing()) {
+		// Bosses are huge and meant to be seen from far away.
+		if (!config.enabled || entity instanceof Player || entity instanceof EnderDragon || entity instanceof WitherBoss
+				|| entity.isCurrentlyGlowing()) {
 			return false;
 		}
 		Minecraft minecraft = Minecraft.getInstance();

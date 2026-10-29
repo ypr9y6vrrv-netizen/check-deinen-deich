@@ -12,7 +12,7 @@ Gedacht als Ergänzung zu [VulkanMod](https://github.com/xCollateral/VulkanMod),
 | Block-Entity-Renderdistanz | 48 Blöcke | Kisten, Schilder, Banner, Köpfe usw. weiter weg werden nicht gerendert (Beacons und End-Gateways ausgenommen) |
 | Partikel-Budget | 800 pro Tick | Partikel-Spam (Explosionen, Farmen) wird gedeckelt |
 
-Spieler, leuchtende Entities, das Reittier und sehr große Entities (z. B. Enderdrache) werden nie ausgeblendet.
+Spieler, leuchtende Entities, das Reittier und Bosse (Enderdrache, Wither) werden nie ausgeblendet.
 
 ## Zusammenspiel mit VulkanMod
 

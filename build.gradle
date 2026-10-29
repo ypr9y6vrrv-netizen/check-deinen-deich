@@ -1,0 +1,52 @@
+plugins {
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+}
+
+base {
+	archivesName = 'frameboost'
+}
+
+loom {
+	runs {
+		// Starts the client only until mixins are applied to all target classes, then exits.
+		// Used by CI to prove the mixins apply on 1.21.11, with and without VulkanMod.
+		mixinAudit {
+			client()
+			name = 'Mixin Audit'
+			vmArg '-Dframeboost.audit=true'
+			vmArg '-Dmixin.debug.verbose=true'
+			runDir 'run-audit'
+		}
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	// Mojang mappings, like VulkanMod, so mixin targets use the same names.
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Optional: pass -Pvulkanmod_jar=/path/to/VulkanMod.jar to test together with VulkanMod.
+	if (project.hasProperty('vulkanmod_jar')) {
+		modLocalRuntime files(project.property('vulkanmod_jar'))
+	}
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}

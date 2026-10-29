@@ -1,0 +1,8 @@
+.gradle/
+build/
+run/
+run-audit/
+ci-mods/
+out/
+*.iml
+.idea/

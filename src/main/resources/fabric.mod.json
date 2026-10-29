@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "frameboost",
+  "version": "${version}",
+  "name": "FrameBoost",
+  "description": "Client-side render-load reduction (entity, block entity and particle budgets). Designed to run alongside VulkanMod.",
+  "authors": ["rondigscolin"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.frameboost.FrameBoost"],
+    "preLaunch": ["dev.frameboost.MixinAudit"]
+  },
+  "mixins": ["frameboost.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "minecraft": "1.21.11",
+    "fabric-api": "*",
+    "java": ">=21"
+  },
+  "suggests": {
+    "vulkanmod": "*"
+  }
+}

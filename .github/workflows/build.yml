@@ -1,0 +1,36 @@
+name: build
+on: [pull_request, push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x ./gradlew
+
+      - name: build
+        run: ./gradlew build
+
+      - name: upload mod jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: FrameBoost
+          path: build/libs/frameboost-*.jar
+
+      - name: mixin audit (Minecraft 1.21.11, without VulkanMod)
+        run: xvfb-run -a ./gradlew runMixinAudit
+
+      - name: download VulkanMod for 1.21.11
+        run: |
+          url=$(curl -sSf 'https://api.modrinth.com/v2/project/vulkanmod/version?loaders=%5B%22fabric%22%5D&game_versions=%5B%221.21.11%22%5D' \
+            | jq -r '[.[0].files[] | select(.primary)][0].url')
+          echo "VulkanMod: $url"
+          mkdir -p ci-mods && curl -sSfL -o ci-mods/vulkanmod.jar "$url"
+
+      - name: mixin audit (Minecraft 1.21.11, with VulkanMod)
+        run: xvfb-run -a ./gradlew runMixinAudit -Pvulkanmod_jar=ci-mods/vulkanmod.jar

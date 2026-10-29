@@ -6,3 +6,4 @@ ci-mods/
 out/
 *.iml
 .idea/
+dist/

@@ -45,7 +45,7 @@ Dort können es spürbar mehr FPS sein; in einer leeren Landschaft ändert sich 
 
 ## Installation
 
-1. Fabric Loader ≥ 0.18.4 für Minecraft 1.21.11 und Fabric API installieren.
+1. Fabric Loader ≥ 0.18.4 (gebaut und getestet mit 0.20.1) für Minecraft 1.21.11 und Fabric API installieren.
 2. VulkanMod (für 1.21.11) und `frameboost-1.0.0+1.21.11.jar` in den `mods`-Ordner legen.
 
 Die fertige Jar gibt es unter **Actions → build → Artifacts → FrameBoost**.

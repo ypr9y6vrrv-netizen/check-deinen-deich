@@ -50,7 +50,7 @@ public final class Culling {
 				|| blockEntity instanceof BeaconBlockEntity || blockEntity instanceof TheEndGatewayBlockEntity) {
 			return false;
 		}
-		Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+		Vec3 camera = Minecraft.getInstance().gameRenderer.mainCamera().position();
 		BlockPos pos = blockEntity.getBlockPos();
 		if (camera.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) > (double) limit * limit) {
 			CullingStats.blockEntitySkipped();

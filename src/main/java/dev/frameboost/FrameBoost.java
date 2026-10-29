@@ -3,7 +3,7 @@ package dev.frameboost;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -29,13 +29,13 @@ public class FrameBoost implements ClientModInitializer {
 				: "VulkanMod not installed: running on the vanilla OpenGL renderer");
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> CullingStats.endTick());
-		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> dispatcher.register(
-				ClientCommandManager.literal("frameboost")
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, buildContext) -> dispatcher.register(
+				ClientCommands.literal("frameboost")
 						.executes(FrameBoost::status)
-						.then(ClientCommandManager.literal("status").executes(FrameBoost::status))
-						.then(ClientCommandManager.literal("on").executes(ctx -> setEnabled(ctx, true)))
-						.then(ClientCommandManager.literal("off").executes(ctx -> setEnabled(ctx, false)))
-						.then(ClientCommandManager.literal("reload").executes(ctx -> {
+						.then(ClientCommands.literal("status").executes(FrameBoost::status))
+						.then(ClientCommands.literal("on").executes(ctx -> setEnabled(ctx, true)))
+						.then(ClientCommands.literal("off").executes(ctx -> setEnabled(ctx, false)))
+						.then(ClientCommands.literal("reload").executes(ctx -> {
 							config = FrameBoostConfig.load();
 							return status(ctx);
 						}))
@@ -47,7 +47,7 @@ public class FrameBoost implements ClientModInitializer {
 
 	private static com.mojang.brigadier.builder.LiteralArgumentBuilder<FabricClientCommandSource> setting(
 			String name, BiConsumer<FrameBoostConfig, Integer> setter, int min, int max) {
-		return ClientCommandManager.literal(name).then(ClientCommandManager.argument("value", IntegerArgumentType.integer(min, max))
+		return ClientCommands.literal(name).then(ClientCommands.argument("value", IntegerArgumentType.integer(min, max))
 				.executes(ctx -> {
 					setter.accept(config, IntegerArgumentType.getInteger(ctx, "value"));
 					config.save();

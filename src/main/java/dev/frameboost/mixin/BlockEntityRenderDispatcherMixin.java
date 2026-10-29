@@ -10,12 +10,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Both the vanilla renderer and VulkanMod's WorldRenderer collect block entities through this method. */
+/** Block entities are collected for rendering through this method (also by VulkanMod's WorldRenderer on 1.21.11). */
 @Mixin(BlockEntityRenderDispatcher.class)
 public abstract class BlockEntityRenderDispatcherMixin {
 	@Inject(method = "tryExtractRenderState", at = @At("HEAD"), cancellable = true)
 	private void frameboost$skipDistantBlockEntity(BlockEntity blockEntity, float partialTick,
-			ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, CallbackInfoReturnable<BlockEntityRenderState> cir) {
+			ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, boolean flag,
+			CallbackInfoReturnable<BlockEntityRenderState> cir) {
 		if (Culling.shouldSkipBlockEntity(blockEntity)) {
 			cir.setReturnValue(null);
 		}

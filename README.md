@@ -1,4 +1,4 @@
-# FrameBoost (Fabric 1.21.11, VulkanMod-kompatibel)
+# FrameBoost (Fabric, Minecraft 26.2)
 
 Client-Mod, die die Render-Last reduziert, indem sie weniger Arbeit an die GPU schickt.
 Gedacht als Ergänzung zu [VulkanMod](https://github.com/xCollateral/VulkanMod), läuft aber auch ohne.
@@ -45,8 +45,8 @@ Dort können es spürbar mehr FPS sein; in einer leeren Landschaft ändert sich 
 
 ## Installation
 
-1. Fabric Loader ≥ 0.18.4 (gebaut und getestet mit 0.20.1) für Minecraft 1.21.11 und Fabric API installieren.
-2. VulkanMod (für 1.21.11) und `frameboost-1.0.0+1.21.11.jar` in den `mods`-Ordner legen.
+1. Fabric Loader ≥ 0.20.1 für Minecraft 26.2 (Java 25) und Fabric API installieren.
+2. VulkanMod (sofern es eine Version für 26.2 gibt) und `frameboost-1.0.0+26.2.jar` in den `mods`-Ordner legen.
 
 Die fertige Jar gibt es unter **Actions → build → Artifacts → FrameBoost**.
 

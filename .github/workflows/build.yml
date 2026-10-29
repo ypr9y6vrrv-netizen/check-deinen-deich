@@ -24,17 +24,22 @@ jobs:
           name: FrameBoost
           path: build/libs/frameboost-*.jar
 
-      - name: mixin audit (Minecraft 1.21.11, without VulkanMod)
+      - name: mixin audit (Minecraft 26.2, without VulkanMod)
         run: xvfb-run -a ./gradlew runMixinAudit
 
-      - name: download VulkanMod for 1.21.11
+      - name: download VulkanMod for 26.2
         run: |
-          url=$(curl -sSf 'https://api.modrinth.com/v2/project/vulkanmod/version?loaders=%5B%22fabric%22%5D&game_versions=%5B%221.21.11%22%5D' \
-            | jq -r '[.[0].files[] | select(.primary)][0].url')
+          url=$(curl -sSf 'https://api.modrinth.com/v2/project/vulkanmod/version?loaders=%5B%22fabric%22%5D&game_versions=%5B%2226.2%22%5D' \
+            | jq -r '[.[0].files[]? | select(.primary)][0].url // empty')
+          if [ -z "$url" ]; then
+            echo "::warning::No VulkanMod release for Minecraft 26.2 on Modrinth yet; skipping the VulkanMod audit"
+            exit 0
+          fi
           echo "VulkanMod: $url"
           mkdir -p ci-mods && curl -sSfL -o ci-mods/vulkanmod.jar "$url"
 
-      - name: mixin audit (Minecraft 1.21.11, with VulkanMod)
+      - name: mixin audit (Minecraft 26.2, with VulkanMod)
+        if: hashFiles('ci-mods/vulkanmod.jar') != ''
         run: xvfb-run -a ./gradlew runMixinAudit -Pvulkanmod_jar=ci-mods/vulkanmod.jar
 
       - name: publish jar to the builds branch
@@ -43,8 +48,8 @@ jobs:
           jar=$(ls build/libs/frameboost-*.jar | grep -v sources)
           mkdir -p /tmp/builds && cp "$jar" /tmp/builds/
           cd /tmp/builds
-          git init -q -b builds
+          git init -q -b "builds-${GITHUB_REF_NAME}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add . && git commit -qm "FrameBoost build from ${GITHUB_SHA::7} (${GITHUB_REF_NAME})"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" builds
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" "builds-${GITHUB_REF_NAME}"

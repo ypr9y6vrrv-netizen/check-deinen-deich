@@ -1,5 +1,5 @@
 plugins {
-	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
 }
 
 base {
@@ -9,7 +9,7 @@ base {
 loom {
 	runs {
 		// Starts the client only until mixins are applied to all target classes, then exits.
-		// Used by CI to prove the mixins apply on 1.21.11, with and without VulkanMod.
+		// Used by CI to prove the mixins apply on this Minecraft version, with and without VulkanMod.
 		mixinAudit {
 			client()
 			name = 'Mixin Audit'
@@ -22,14 +22,12 @@ loom {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	// Mojang mappings, like VulkanMod, so mixin targets use the same names.
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	// Optional: pass -Pvulkanmod_jar=/path/to/VulkanMod.jar to test together with VulkanMod.
 	if (project.hasProperty('vulkanmod_jar')) {
-		modLocalRuntime files(project.property('vulkanmod_jar'))
+		localRuntime files(project.property('vulkanmod_jar'))
 	}
 }
 
@@ -43,10 +41,10 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 25
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
